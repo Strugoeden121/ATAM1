@@ -10,36 +10,36 @@ _start:
     # lea source, %rcx   # rcx = mem spot of source 
     # lea destination, %rdi # rdi = mem spot of dest
     cmp $0, %ebx  
-    jl negative_HW2
-    je end_HW2
+    jl negative_HW1
+    je end_HW1
     movsx %ebx, %rbx
     cmp %r9, %rsi
-    jge loop_B_HW2
+    jge loop_B_HW1
 
 
 
 
-loop_F_HW2:
+loop_F_HW1:
     cmp %rbx, %rax
-    jge end_HW2
+    jge end_HW1
     mov source(%rax), %dl
     lea destination(%rax), %rcx
     mov %dl, (%rcx)
     inc %rax 
-    jmp loop_F_HW2
+    jmp loop_F_HW1
 
-loop_B_HW2:
+loop_B_HW1:
     xor %r10, %r10 
     cmp %rbx, %r10
-    jge end_HW2
+    jge end_HW1
     dec %rbx
     mov source(%rbx), %dl
     lea destination(%rbx), %rcx
     mov %dl, (%rcx)    
-    jmp loop_B_HW2
+    jmp loop_B_HW1
 
-negative_HW2:
+negative_HW1:
     movl %ebx, (destination)
   
 
-end_HW2:
+end_HW1:
