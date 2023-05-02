@@ -1,9 +1,5 @@
 .global _start
 
-.section .data
-  num: .quad 0
-  Bool: .byte 0
-
 .section .text
 _start:
     xor %al, %al
@@ -17,7 +13,4 @@ j_inc_HW1:
     jnz loop_HW1
     mov %al, (Bool)
 
-bad_exit:
-  movq $60, %rax
-  movq $1, %rdi
-  syscall
+
