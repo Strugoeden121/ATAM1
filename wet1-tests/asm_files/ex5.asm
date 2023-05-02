@@ -31,7 +31,6 @@ RIGHT_HM1:
     mov %rcx, 16(%rax)
     jmp END_HW1
 RIGHT_SON_LOOP_HW1:
-    jmp END_HW1
     mov 16(%rax), %rax
     jmp LOOP_HW1
 

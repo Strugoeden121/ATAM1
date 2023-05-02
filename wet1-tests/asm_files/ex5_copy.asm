@@ -11,7 +11,7 @@ _start:
     je ROOT_INSERT_HW1
     mov (root), %rax # rax = current node mem
 LOOP_HW1:
-
+    mov (%rax), %rdi
     cmp (%rax), %r8
     je END_HW1
     jg RIGHT_HM1
@@ -31,7 +31,6 @@ RIGHT_HM1:
     mov %rcx, 16(%rax)
     jmp END_HW1
 RIGHT_SON_LOOP_HW1:
-    jmp END_HW1
     mov 16(%rax), %rax
     jmp LOOP_HW1
 
@@ -49,32 +48,28 @@ bad_exit:
 .section .data
   root: .quad node_0
   node_0:
-            .quad 635
-            .quad node_3
+            .quad 767
             .quad node_1
-  node_3:
-            .quad 392
-            .quad 0
-            .quad node_5
-  node_5:
-            .quad 625
-            .quad 0
-            .quad node_6
-  node_6:
-            .quad 632
-            .quad 0
             .quad 0
   node_1:
-            .quad 997
+            .quad 630
             .quad node_2
             .quad 0
   node_2:
-            .quad 860
+            .quad 313
             .quad node_4
-            .quad 0
+            .quad node_3
   node_4:
-            .quad 783
+            .quad 57
             .quad 0
             .quad 0
-  new_node: .quad 860, 0, 0
+  node_3:
+            .quad 390
+            .quad 0
+            .quad node_5
+  node_5:
+            .quad 491
+            .quad 0
+            .quad 0
+  new_node: .quad 504, 0, 0
 
