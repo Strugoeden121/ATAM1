@@ -41,3 +41,40 @@ ROOT_INSERT_HW1:
 
 END_HW1:
 
+bad_exit:
+  movq $60, %rax
+  movq $1, %rdi
+  syscall
+
+.section .data
+  root: .quad node_0
+  node_0:
+            .quad 635
+            .quad node_3
+            .quad node_1
+  node_3:
+            .quad 392
+            .quad 0
+            .quad node_5
+  node_5:
+            .quad 625
+            .quad 0
+            .quad node_6
+  node_6:
+            .quad 632
+            .quad 0
+            .quad 0
+  node_1:
+            .quad 997
+            .quad node_2
+            .quad 0
+  node_2:
+            .quad 860
+            .quad node_4
+            .quad 0
+  node_4:
+            .quad 783
+            .quad 0
+            .quad 0
+  new_node: .quad 860, 0, 0
+
