@@ -52,3 +52,19 @@ END_ROUND_HW3:
 END_HW3:
     xor %r11d, %r11d
     mov %r11d, (%r10, %rcx, 4)
+
+
+
+
+bad_exit:
+  movq $60, %rax
+  movq $1, %rdi
+  syscall
+
+.section .data
+  array1: .int 94,94,88,87,85,82,81,77,76,74,68,67,65,63,53,41,37,34,28,22,20,16,13,8,5,0
+  array2: .int 68,65,21,0
+  mergedArray: .zero 26
+
+
+
