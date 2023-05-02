@@ -12,5 +12,3 @@ j_inc_HW1:
     test %rbx, %rbx
     jnz loop_HW1
     mov %al, (Bool)
-
-
