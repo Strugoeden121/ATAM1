@@ -5,6 +5,8 @@ _start:
 #your code here
     # TODO - add check source isn't 0 and add to regs
     xor %r10, %r10
+
+    
     
     mov (Value), %r8d  # r8d = value int
     lea Source, %rcx # rcx = source mem
@@ -24,11 +26,25 @@ LOOP_HW1:
     mov (%rax), %r9d  # update current node value 
     cmp %r9d, %r8d # check if current-node is the value
     je CHANGE_BACK_HW1
-    jmp LOOP_HW1    
+    jmp LOOP_HW1 
+
+CHANGE_NODE_PREV_SOURCE_HW1:
+# ---------find source pre---------
+    mov $head, %rbx # rbx = temp to find before source, starts at head
+    mov (head), %rdx # rdx = current node to find source
+FIND_PREV_SOURCE_HM1:
+    cmp %r12, %rdx # if source==current
+    je CHANGE_NODE_PREV_VALUE_HW1
+    mov %rdx, %rbx
+    add $4, %rdx
+    mov (%rdx), %rdx
+    jmp FIND_PREV_SOURCE_HM1   
 
 CHANGE_NODE_HEAD_PREV_HW1:
     mov %r12, (head)
-    jmp CHANGE_BACK_HW1
+    mov 4(%rax), %r13 # r13 = node after current with Value
+    mov 4(%r12), %r14 # r14 = node after Source
+    jmp AFTER_VALUE_HW1
     
 
 CHANGE_NODE_PREV_VALUE_HW1:
@@ -50,19 +66,7 @@ AFTER_VALUE_HW1:
     cmp %r14, %rax # if source.next==current ->neighbors
     je NEIGHBORS_SOURCE_BEFORE_VALUE_AFTER_HW1
     mov %r14, (%rsi) # temp (with before value) = Source.next
-    jmp CHANGE_NODE_PREV_SOURCE_HW1
-
-CHANGE_NODE_PREV_SOURCE_HW1:
-# ---------find source pre---------
-    mov $head, %rbx # rbx = temp to find before source, starts at head
-    mov (head), %rdx # rdx = current node to find source
-FIND_PREV_SOURCE_HM1:
-    cmp %r12, %rdx # if source==current
-    je CHANGE_PREV_HW1
-    mov %rdx, %rbx
-    add $4, %rdx
-    mov (%rdx), %rdx
-    jmp FIND_PREV_SOURCE_HM1
+    jmp CHANGE_PREV_HW1
 
 CHANGE_PREV_HW1:
     mov %rbx, %r15 # temp with pre of source
@@ -71,11 +75,11 @@ CHANGE_PREV_HW1:
     add $4, %r15 # pre.next
     cmp %rbx, %rax # if value before source
     je NEIGHBORS_VALUE_BEFORE_SOURCE_BEFORE_HW1
-    mov %rax, (%r15) # source.next = value mem
+    mov %rax, (%r15) # pre source.next = value mem
     jmp AFTER_SOURCE_HW1
 
 HEAD_TO_SOURCE_HM1:
-    mov %r12, (head)
+    mov %rax, (head)
     jmp AFTER_SOURCE_HW1
 
 AFTER_SOURCE_HW1:
@@ -93,10 +97,10 @@ NEIGHBORS_VALUE_BEFORE_SOURCE_AFTER_HW1:
 
 NEIGHBORS_SOURCE_BEFORE_VALUE_AFTER_HW1:
     mov %r12, (%rsi) # value.next = source mem
-    jmp CHANGE_NODE_PREV_SOURCE_HW1
+    jmp CHANGE_PREV_HW1
 
 NEIGHBORS_VALUE_BEFORE_SOURCE_BEFORE_HW1:
-    mov %rax, (%r15) # pre_source.next = value_Node mem 
+    mov %r14, (%r15) # pre_source.next = value_Node mem 
     jmp AFTER_SOURCE_HW1
 
 NEIGHBORS_SOURCE_BEFORE_VALUE_BEFORE_HW1:
@@ -106,7 +110,7 @@ NEIGHBORS_SOURCE_BEFORE_VALUE_BEFORE_HW1:
 CHANGE_BACK_HW1:
     mov 4(%rax), %r13 # r13 = node after current with Value
     mov 4(%r12), %r14 # r14 = node after Source
-    jmp CHANGE_NODE_PREV_VALUE_HW1
+    jmp CHANGE_NODE_PREV_SOURCE_HW1
 
 
 END_HW1:

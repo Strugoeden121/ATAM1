@@ -5,7 +5,8 @@ _start:
 #your code here
     # TODO - add check source isn't 0 and add to regs
     xor %r10, %r10
-    mov (head), %rdi
+
+    
     
     mov (Value), %r8d  # r8d = value int
     lea Source, %rcx # rcx = source mem
@@ -16,7 +17,7 @@ _start:
     # add check if is non existing
     mov (%rax), %r9d  # r9d = current node value 
     cmp %r9d, %r8d # check if first-node is the value
-    je CHANGE_NODE_HEAD_PREV_HW1
+    je CHANGE_NODE_PREV_VALUE_HW1
 LOOP_HW1:
     mov %rax, %r11 # r11 = pre node
     mov 4(%rax), %rax # rax move to next
@@ -25,17 +26,33 @@ LOOP_HW1:
     mov (%rax), %r9d  # update current node value 
     cmp %r9d, %r8d # check if current-node is the value
     je CHANGE_BACK_HW1
-    jmp LOOP_HW1    
+    jmp LOOP_HW1 
+
+CHANGE_NODE_PREV_SOURCE_HW1:
+# ---------find source pre---------
+    mov $head, %rbx # rbx = temp to find before source, starts at head
+    mov (head), %rdx # rdx = current node to find source
+FIND_PREV_SOURCE_HM1:
+    cmp %r12, %rdx # if source==current
+    je CHANGE_NODE_PREV_VALUE_HW1
+    mov %rdx, %rbx
+    add $4, %rdx
+    mov (%rdx), %rdx
+    jmp FIND_PREV_SOURCE_HM1   
 
 CHANGE_NODE_HEAD_PREV_HW1:
     mov %r12, (head)
-    jmp CHANGE_BACK_HW1
+    mov 4(%rax), %r13 # r13 = node after current with Value
+    mov 4(%r12), %r14 # r14 = node after Source
+    jmp AFTER_VALUE_HW1
     
 
 CHANGE_NODE_PREV_VALUE_HW1:
     cmp %rax, %r12 # id source = curr value node
     je END_HW1
     mov %r11, %r15 # r15 = temp with pre-node 
+    cmp $head, %rax # if head before-neighboor to value
+    je CHANGE_NODE_HEAD_PREV_HW1
     add $4, %r15 # pre.next
     cmp %r11, %r12
     je NEIGHBORS_SOURCE_BEFORE_VALUE_BEFORE_HW1 
@@ -51,19 +68,7 @@ AFTER_VALUE_HW1:
     cmp %r14, %rax # if source.next==current ->neighbors
     je NEIGHBORS_SOURCE_BEFORE_VALUE_AFTER_HW1
     mov %r14, (%rsi) # temp (with before value) = Source.next
-    jmp CHANGE_NODE_PREV_SOURCE_HW1
-
-CHANGE_NODE_PREV_SOURCE_HW1:
-# ---------find source pre---------
-    mov $head, %rbx # rbx = temp to find before source, starts at head
-    mov (head), %rdx # rdx = current node to find source
-FIND_PREV_SOURCE_HM1:
-    cmp %r12, %rdx # if source==current
-    je CHANGE_PREV_HW1
-    mov %rdx, %rbx
-    add $4, %rdx
-    mov (%rdx), %rdx
-    jmp FIND_PREV_SOURCE_HM1
+    jmp CHANGE_PREV_HW1
 
 CHANGE_PREV_HW1:
     mov %rbx, %r15 # temp with pre of source
@@ -72,11 +77,11 @@ CHANGE_PREV_HW1:
     add $4, %r15 # pre.next
     cmp %rbx, %rax # if value before source
     je NEIGHBORS_VALUE_BEFORE_SOURCE_BEFORE_HW1
-    mov %rax, (%r15) # source.next = value mem
+    mov %rax, (%r15) # pre source.next = value mem
     jmp AFTER_SOURCE_HW1
 
 HEAD_TO_SOURCE_HM1:
-    mov %r12, (head)
+    mov %rax, (head)
     jmp AFTER_SOURCE_HW1
 
 AFTER_SOURCE_HW1:
@@ -94,10 +99,10 @@ NEIGHBORS_VALUE_BEFORE_SOURCE_AFTER_HW1:
 
 NEIGHBORS_SOURCE_BEFORE_VALUE_AFTER_HW1:
     mov %r12, (%rsi) # value.next = source mem
-    jmp CHANGE_NODE_PREV_SOURCE_HW1
+    jmp CHANGE_PREV_HW1
 
 NEIGHBORS_VALUE_BEFORE_SOURCE_BEFORE_HW1:
-    mov %rax, (%r15) # pre_source.next = value_Node mem 
+    mov %r14, (%r15) # pre_source.next = value_Node mem 
     jmp AFTER_SOURCE_HW1
 
 NEIGHBORS_SOURCE_BEFORE_VALUE_BEFORE_HW1:
@@ -107,10 +112,11 @@ NEIGHBORS_SOURCE_BEFORE_VALUE_BEFORE_HW1:
 CHANGE_BACK_HW1:
     mov 4(%rax), %r13 # r13 = node after current with Value
     mov 4(%r12), %r14 # r14 = node after Source
-    jmp CHANGE_NODE_PREV_VALUE_HW1
+    jmp CHANGE_NODE_PREV_SOURCE_HW1
 
 
 END_HW1:
+
 
 
 bad_exit:
@@ -122,37 +128,14 @@ bad_exit:
   head:
             .quad node_0
   node_0:
-            .int 38
+            .int 288
             .quad node_1
   node_1:
-            .int 412
+            .int 69
             .quad node_2
   node_2:
-            .int 720
-            .quad node_3
-  node_3:
-            .int 883
-            .quad node_4
-  node_4:
-            .int 788
-            .quad node_5
-  node_5:
-            .int 511
-            .quad node_6
-  node_6:
-            .int 439
-            .quad node_7
-  node_7:
-            .int 42
-            .quad node_8
-  node_8:
-            .int 330
-            .quad node_9
-  node_9:
-            .int 798
-            .quad node_10
-  node_10:
-            .int 48
+            .int 687
             .quad 0
-  Source: .quad node_9
-  Value: .int 511
+  Source: .quad node_2
+  Value: .int 288
+
