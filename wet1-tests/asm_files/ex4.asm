@@ -13,11 +13,12 @@ _start:
     mov (%rcx), %r12 # r12 = source node
     cmp %r10, (head)
     je END_HW1 
+    mov $head, %r11
     mov (head), %rax # rax = current node value mem
     # add check if is non existing
     mov (%rax), %r9d  # r9d = current node value 
     cmp %r9d, %r8d # check if first-node is the value
-    je CHANGE_NODE_PREV_VALUE_HW1
+    je CHANGE_NODE_PREV_SOURCE_HW1
 LOOP_HW1:
     mov %rax, %r11 # r11 = pre node
     mov 4(%rax), %rax # rax move to next
@@ -51,7 +52,7 @@ CHANGE_NODE_PREV_VALUE_HW1:
     cmp %rax, %r12 # id source = curr value node
     je END_HW1
     mov %r11, %r15 # r15 = temp with pre-node 
-    cmp $head, %rax # if head before-neighboor to value
+    cmp $head, %r11 # if head before-neighboor to value
     je CHANGE_NODE_HEAD_PREV_HW1
     add $4, %r15 # pre.next
     cmp %r11, %r12
